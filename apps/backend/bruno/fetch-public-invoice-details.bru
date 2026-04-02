@@ -1,0 +1,11 @@
+meta {
+  name: Fetch Public Invoice Details
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/public/invoices/{{invoiceId}}
+  body: none
+  auth: none
+}

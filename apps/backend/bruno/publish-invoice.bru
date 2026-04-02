@@ -1,0 +1,15 @@
+meta {
+  name: Publish Invoice
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/admin/invoices/{{invoiceId}}/publish
+  body: none
+  auth: none
+}
+
+headers {
+  x-admin-token: {{adminToken}}
+}
