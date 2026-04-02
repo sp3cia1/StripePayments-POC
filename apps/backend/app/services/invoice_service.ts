@@ -20,6 +20,18 @@ export type PublicInvoiceDetails = {
 
 export default class InvoiceService {
   private stripe: Stripe
+  private readonly dummyClients = [
+    'Stark Industries',
+    'Wayne Enterprises',
+    'Acme Manufacturing',
+    'Oscorp Labs',
+    'Umbrella Biotech',
+    'Globex Corporation',
+    'Wonka Logistics',
+    'Initech Solutions',
+    'Hooli Tech',
+    'Vandelay Industries',
+  ]
 
   constructor(stripeClient?: Stripe) {
     this.stripe = stripeClient ?? new Stripe(env.get('STRIPE_SECRET_KEY'))
@@ -71,9 +83,12 @@ export default class InvoiceService {
   }
 
   async createDummyInvoice() {
+    const clientName = this.pickRandom(this.dummyClients)
+    const amountInr = this.generateRandomAmount()
+
     return Invoice.create({
-      clientName: 'Stark Industries',
-      amountInr: '50000.00',
+      clientName,
+      amountInr,
       paymentStatus: 'DRAFT',
       stripePaymentIntentId: null,
       clientSecret: null,
@@ -122,5 +137,18 @@ export default class InvoiceService {
     }
 
     return minorUnits
+  }
+
+  private pickRandom<T>(items: T[]): T {
+    const index = Math.floor(Math.random() * items.length)
+    return items[index]
+  }
+
+  private generateRandomAmount(): string {
+    const min = 1500
+    const max = 125000
+    const randomWhole = Math.floor(Math.random() * (max - min + 1)) + min
+    const randomPaise = Math.floor(Math.random() * 100)
+    return `${randomWhole}.${String(randomPaise).padStart(2, '0')}`
   }
 }
