@@ -113,6 +113,27 @@ export default class InvoiceService {
     }
   }
 
+  async reconcilePaidInvoice(paymentIntentId: string): Promise<'updated' | 'already_paid' | 'not_found'> {
+    if (!paymentIntentId.trim()) {
+      return 'not_found'
+    }
+
+    const invoice = await Invoice.query().where('stripe_payment_intent_id', paymentIntentId).first()
+
+    if (!invoice) {
+      return 'not_found'
+    }
+
+    if (invoice.paymentStatus === 'PAID') {
+      return 'already_paid'
+    }
+
+    invoice.paymentStatus = 'PAID'
+    await invoice.save()
+
+    return 'updated'
+  }
+
   private async getInvoiceOrThrow(invoiceId: number) {
     const invoice = await Invoice.find(invoiceId)
 

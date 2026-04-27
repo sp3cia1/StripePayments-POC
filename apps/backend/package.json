@@ -8,6 +8,7 @@
     "start": "node bin/server.js",
     "build": "node ace build",
     "dev": "node ace serve --hmr",
+    "stripe:listen": "stripe listen --forward-to localhost:3333/api/webhooks/stripe",
     "test": "node ace test",
     "migration:run": "node ace migration:run",
     "db:seed": "node ace db:seed",

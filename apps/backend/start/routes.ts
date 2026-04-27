@@ -11,6 +11,7 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
 const InvoicesController = () => import('#controllers/invoices_controller')
+const WebhooksController = () => import('#controllers/webhooks_controller')
 
 router.get('/', async () => {
   return {
@@ -24,9 +25,17 @@ router
     router.post('/invoices/:id/publish', [InvoicesController, 'publish']).use(middleware.admin())
   })
   .prefix('/api/admin')
+  .use(middleware.bodyParser())
 
 router
   .group(() => {
     router.get('/invoices/:id', [InvoicesController, 'showPublic'])
   })
   .prefix('/api/public')
+  .use(middleware.bodyParser())
+
+router
+  .group(() => {
+    router.post('/stripe', [WebhooksController, 'handleStripe'])
+  })
+  .prefix('/api/webhooks')

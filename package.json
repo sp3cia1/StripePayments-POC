@@ -10,6 +10,7 @@
     "dev:frontend": "npm run dev --workspace frontend",
     "build": "npm run build --workspace backend && npm run build --workspace frontend",
     "db:migrate": "npm run migration:run --workspace backend",
-    "db:seed": "npm run db:seed --workspace backend"
+    "db:seed": "npm run db:seed --workspace backend",
+    "stripe:listen": "stripe listen --forward-to localhost:3333/api/webhooks/stripe"
   }
 }
